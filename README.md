@@ -1,6 +1,6 @@
 
 ## Demo
-https://joacobuss.github.io/Alimentos/
+https://joacobuss.github.io/alimentos/
 
 ## Modo demo
 Este proyecto está publicado como frontend estático (GitHub Pages).
