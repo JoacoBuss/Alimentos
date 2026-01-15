@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Turnos – Microemprendimientos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-sky-50 text-gray-800">
+  <div class="max-w-5xl mx-auto p-6">
+    <h1 class="text-3xl font-bold text-sky-700 mb-2">Solicitud de Turno</h1>
+    <p class="mb-6">
+      Complete todos los datos requeridos. Primero el responsable/dueño y luego (si corresponde) el personal.
+    </p>
+
+    <form id="formulario" class="space-y-8">
+      <!-- 1) Responsable / Dueño -->
+      <section class="bg-white rounded-xl shadow p-5">
+        <h2 class="text-xl font-semibold text-sky-600 mb-4">1) Datos del microemprendedor (Responsable / Dueño)</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-medium mb-1">Apellido y Nombre *</label>
+            <input name="dueno_nombre" class="w-full p-3 border rounded" required />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">DNI *</label>
+            <input name="dueno_dni" class="w-full p-3 border rounded" required inputmode="numeric" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Teléfono (WhatsApp) *</label>
+            <input name="dueno_telefono" class="w-full p-3 border rounded" required placeholder="+549..." inputmode="tel" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Domicilio *</label>
+            <input name="dueno_domicilio" class="w-full p-3 border rounded" required />
+          </div>
+        </div>
+      </section>
+
+      <!-- 2) Datos del emprendimiento -->
+      <section class="bg-white rounded-xl shadow p-5">
+        <h2 class="text-xl font-semibold text-sky-600 mb-4">2) Datos del emprendimiento</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-medium mb-1">Rubro *</label>
+            <input name="empr_rubro" class="w-full p-3 border rounded" required />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Producto (texto libre) *</label>
+            <input name="empr_producto_texto" class="w-full p-3 border rounded" required />
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium mb-1">Materias primas utilizadas *</label>
+            <textarea name="empr_materias_primas" class="w-full p-3 border rounded" required rows="3"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Inicio de la actividad *</label>
+            <input name="empr_inicio_actividad" class="w-full p-3 border rounded" required placeholder="Ej: 2023 / Enero 2024 / etc" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Elaboración semanal (kgs/unid/litros/etc) *</label>
+            <input name="empr_elaboracion_semanal" class="w-full p-3 border rounded" required />
+          </div>
+        </div>
+      </section>
+
+      <!-- 3) Productos (radio button) -->
+      <section class="bg-white rounded-xl shadow p-5">
+        <h2 class="text-xl font-semibold text-sky-600 mb-2">3) Productos elaborados (seleccione 1 como principal) *</h2>
+        <p class="text-sm text-gray-600 mb-4">
+          Esto lo dejamos como <b>radio</b> para un producto principal. Si querés permitir múltiples después, lo cambiamos a checkbox.
+        </p>
+
+        <div id="productosContainer" class="space-y-6"></div>
+
+        <div class="mt-4">
+          <label class="block text-sm font-medium mb-1">Otro / Aclaración (opcional)</label>
+          <input name="producto_otro" class="w-full p-3 border rounded" placeholder="Ej: A22 Mantecol / C18 Frutas trozadas / etc" />
+        </div>
+      </section>
+
+      <!-- 4) ¿Tiene personal? -->
+      <section class="bg-white rounded-xl shadow p-5">
+        <h2 class="text-xl font-semibold text-sky-600 mb-3">4) Manipuladores de alimentos</h2>
+
+        <div class="mb-3">
+          <span class="block text-sm font-medium mb-2">¿Tiene personal además del responsable? *</span>
+          <label class="mr-4">
+            <input type="radio" name="tiene_personal" value="no" required checked />
+            No
+          </label>
+          <label>
+            <input type="radio" name="tiene_personal" value="si" required />
+            Sí
+          </label>
+        </div>
+
+        <div id="bloquePersonal" class="hidden">
+          <div class="flex items-center justify-between mb-3">
+            <p class="text-sm text-gray-600">Cargue cada manipulador (puede agregar filas).</p>
+            <button type="button" id="btnAddFila" class="bg-sky-600 text-white px-4 py-2 rounded">
+              + Agregar manipulador
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full border">
+              <thead class="bg-sky-100">
+                <tr>
+                  <th class="text-left p-2 border">Apellido y Nombre</th>
+                  <th class="text-left p-2 border">DNI</th>
+                  <th class="text-left p-2 border">Carnet manipulación</th>
+                  <th class="p-2 border">Quitar</th>
+                </tr>
+              </thead>
+              <tbody id="personalTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5) Turno -->
+      <section class="bg-white rounded-xl shadow p-5">
+        <h2 class="text-xl font-semibold text-sky-600 mb-3">5) Turno</h2>
+        <div class="flex flex-col md:flex-row gap-3">
+          <div>
+            <label class="block text-sm font-medium mb-1">Fecha *</label>
+            <input type="date" name="turno_fecha" class="p-2 border rounded" required />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Hora *</label>
+            <select name="turno_hora" class="p-2 border rounded" required>
+              <option value="">Seleccione…</option>
+              <option>07:00</option><option>08:00</option><option>09:00</option>
+              <option>10:00</option><option>11:00</option><option>12:00</option>
+            </select>
+          </div>
+        </div>
+        <div class="mt-4">
+          <label class="block text-sm font-medium mb-1">Observaciones</label>
+          <textarea name="observaciones" class="w-full p-3 border rounded" rows="3"></textarea>
+        </div>
+      </section>
+
+      <button class="bg-sky-700 hover:bg-sky-800 text-white px-6 py-3 rounded text-lg">
+        Enviar solicitud
+      </button>
+    </form>
+
+    <p id="ok" class="hidden mt-6 text-green-700 font-semibold text-lg bg-green-50 border border-green-200 p-4 rounded">
+      ✔ La información se cargó correctamente. Su turno fue registrado.
+    </p>
+
+    <p id="err" class="hidden mt-6 text-red-700 font-semibold text-lg bg-red-50 border border-red-200 p-4 rounded"></p>
+
+    <pre id="debug" class="hidden mt-4 bg-gray-900 text-gray-100 p-4 rounded overflow-auto"></pre>
+  </div>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
