@@ -1,6 +1,6 @@
 
 ## Demo
-https://joacobuss.github.io/SeguridadAlimentaria/
+https://joacobuss.github.io/Alimentos/
 
 ## Modo demo
 Este proyecto está publicado como frontend estático (GitHub Pages).
